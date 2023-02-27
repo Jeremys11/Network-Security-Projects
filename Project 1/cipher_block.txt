@@ -1,0 +1,34 @@
+How does cipher block chaining work?
+
+Cipher block chaining is a process used to encrypt and decrypt large plaintext inputs by creating a cryptographic 
+chain wherein each ciphertext block is dependent on the last.
+
+The first step to initiating a cipher block chain is to XOR the first of many plaintext blocks with an IV -- a 
+unique, fixed-length conversion function -- to create a random, or pseudorandom, output. This XOR output is then 
+encrypted using a cipher key to produce a ciphertext block, an encrypted text format that can be decrypted with the 
+correct key.
+
+For example, after the first plaintext block has been transformed into a ciphertext block, the subsequent plaintext 
+block must be encrypted using a similar process. The only difference, however, is that the ciphertext block replaces 
+the IV as one of the XOR inputs. This means that the encryption of the plaintext block after the first one is 
+dependent on the encryption of the first plaintext block. With each plaintext block encryption, the adjacent 
+ciphertext block must be used -- like a chain. Therefore, the second ciphertext block is produced by XORing the 
+first ciphertext block with the second plaintext block and using the same encryption key. This process would repeat 
+itself until there is no more plaintext left to encrypt.
+
+The CBC decryption process works in a similar but distinct way. Contrary to similar decryption methods, the process 
+does not start with the final ciphertext block. In fact, it can all happen simultaneously because all inputs are 
+present.
+
+To invert the cipher block chaining procedure, one must essentially reverse the encryption process. To do that, 
+one must first feed the first ciphertext block through the decryption process. This involves using the same 
+encryption key as before but on the ciphertext block. The product of this interaction is then XORed with the original
+ IV to extract the original plaintext block. While similar, decrypting the second ciphertext block is different 
+ from decrypting the first one because an IV cannot be used.
+
+After combining the second ciphertext block with the cipher key, the output is XORed with the first ciphertext 
+block to produce the second plaintext block. In this case, the previous ciphertext block replaces the IV during 
+the decryption process. Remember, this is how the second ciphertext block was originally created; the second 
+plaintext block and the first ciphertext block were XORed together. The process is complete once all ciphertexts 
+have been successfully decrypted into plaintext.
+
