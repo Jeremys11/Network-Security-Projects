@@ -1,7 +1,5 @@
 from bitstring import BitArray, BitStream
 
-SHIFT_COUNTER = [1,2,2,2,2]
-
 ##  Takes in 4bit input
 ##  Outputs 4 bit value by joining 2 2bit values
 def s_boxes(text):
@@ -53,7 +51,7 @@ def post_sbox_permutation(S1,S2):
 ##  Input 4bit value R
 ##  Returns 8bit value
 def expansion_function(R):
-    permutation_rule= {0:3, 1:0, 2:1, 3:2, 4:1, 5:2, 6:3, 7:1}
+    permutation_rule= {0:3, 1:0, 2:1, 3:2, 4:1, 5:2, 6:3, 7:0}
 
     permuted_text = BitArray(length=8)
     for i in range(len(permuted_text)):
@@ -67,9 +65,7 @@ def cipher_function(R,K):
 
     expandedR = expansion_function(R)
 
-    preSBox = expandedR.__ixor__(
-        K
-    )
+    preSBox = expandedR ^ K
 
     output = s_boxes(preSBox)
 
@@ -108,9 +104,9 @@ def permuted_choice2(key):
 ##  As these all work on the plaintext and have the same bit size, I grouped them together
 def permutation(text,permute):
     if permute == "initial":
-        permutation_rule = {0:3, 1:0, 2:2, 3:4, 4:6, 5:1, 6:7, 7:5}
+        permutation_rule = {0:1, 1:5, 2:2, 3:0, 4:3, 5:7, 6:4, 7:6}
     elif permute == "inverse":
-        permutation_rule = {0:1, 1:5, 2:2, 3:0, 4:3, 5:7, 6:3, 7:6}
+        permutation_rule = {0:3, 1:0, 2:2, 3:4, 4:6, 5:1, 6:7, 7:5}
     elif permute == "expansion":
         permutation_rule = {0:3, 1:0, 2:1, 3:2, 4:1, 5:2, 6:3, 7:0}
     else:
@@ -126,16 +122,14 @@ def permutation(text,permute):
 ##  Returns 2 4bit values L and R
 def plaintext_flowchart(L,R,K):
 
-    R1 = L.__ixor__(
-        cipher_function(R,K)
-    )
+    R1 = L ^ cipher_function(R,K)
 
     L1 = R
     return L1,R1
 
 ##  Takes in 2 5bit values C and D
 ##  Returns 2 5bit values C and D and 8bit value K
-def key_flowchart(C,D,round_counter):
+def key_flowchart(C,D):
 
     K = permuted_choice2(C+D)
 
@@ -150,40 +144,47 @@ def key_flowchart(C,D,round_counter):
 ##  Outputs 8bit ciphertext
 def S_DES(plaintext,key,decrpyt):
     
+    subkeys = []
     C,D = permuted_choice1(key)
-    
-    initial_permutation = permutation(plaintext,permute="initial")
-
-    if decrpyt == True:
-        L = initial_permutation[4:]
-        R = initial_permutation[:4]        
-    else:
-        #Swap L and R for decryption
-        L = initial_permutation[:4]
-        R = initial_permutation[4:]  
-
     #Left shift 1 with wrap around
     #Only first left shift is by 1, the rest are by 2
-    L.rol(1) 
-    R.rol(1) 
+    C.rol(1) 
+    D.rol(1)
+    for i in range(4):
+        C,D,K = key_flowchart(C,D)
+        subkeys.append(K)
+
+    initial_permutation = permutation(plaintext,permute="initial")
+    if decrpyt == True:
+        L = initial_permutation[4:]
+        R = initial_permutation[:4]
+    else:
+        #Swap L and R on decryption
+        L = initial_permutation[:4]
+        R = initial_permutation[4:]
 
     #Looping for both plaintext and key flowcharts
-    #C,D,L,R Defined outside loop so they are not lost between loops
     for i in range(4):
-        C,D,K = key_flowchart(C,D,round_counter)
-        L,R = plaintext_flowchart(L,R,K)
+        if decrpyt == True:
+            L,R = plaintext_flowchart(L,R,subkeys[3-i])
+        else:
+            L,R = plaintext_flowchart(L,R,subkeys[i])
 
-    final_text = BitArray(L+R,length=8)
-    inverse_permutation = permutation(final_text,permute="inverse")
+    if decrpyt == True:
+        final_text = BitArray(R+L,length=8) #Rearrange this way since swapped in beginning
+    else:
+        final_text = BitArray(L+R,length=8)
 
-    return inverse_permutation
+    final_permutation = permutation(final_text,permute="inverse")
+
+    return final_permutation
 
 ##  MAIN
 ##  
 if __name__ == "__main__":
     #plaintext_ciphertext = {"0x42":"0x11", "0x72":"0x6d", "0x75":"0xfa", "0x74":"0xa9", "0x65":"0x34"}
-    #plaintext_key = {"0x42":"0x256"}
-    plaintext_key = {"0x94":"0x256"}
+    #plaintext_key = {"0x12":"0x256"}
+    plaintext_key = {"0x0b":"0x256"}
     for plaintext in plaintext_key:
         output = S_DES(plaintext=BitStream(plaintext),key=BitStream(plaintext_key[plaintext]),decrpyt=True)
         print("output: ", output)
