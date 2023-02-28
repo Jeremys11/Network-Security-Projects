@@ -185,5 +185,13 @@ def S_DES(plaintext,key,decrpyt):
 ##  
 if __name__ == "__main__":
 
-    output = S_DES(BitArray(bin="10101000",length=8),BitArray(bin="0000000000",length=10),decrpyt=True)
-    print("output: ", output.bin)
+    #(746, 513) True Keys
+    plaintext_ciphertext = [[BitArray("0x42"),BitArray("0x11")], [BitArray("0x72"),BitArray("0x6d")], 
+                        [BitArray("0x75"),BitArray("0xfa")], [BitArray("0x74"),BitArray("0xa9")], 
+                        [BitArray("0x65"),BitArray("0x34")]]
+
+    for pair in plaintext_ciphertext:
+        plaintext = pair[0]
+        output = S_DES(plaintext,BitArray(uint=746,length=10),decrpyt=False)
+        output2 = S_DES(output,BitArray(uint=513,length=10),decrpyt=False)
+        print("output: ", output2)
