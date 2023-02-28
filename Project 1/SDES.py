@@ -195,5 +195,3 @@ if __name__ == "__main__":
     #output1 = S_DES(BitStream(plaintext),BitStream(Keys[1]))
     #output2 = S_DES(BitStream(output1),BitStream(Keys[1]))
     #print(output)
-
-    #

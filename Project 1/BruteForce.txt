@@ -1,0 +1,14 @@
+Plaintext: 0x42
+Key: 0b0010000100
+Ciphertext: 0x11
+Time: 0.155775785446167
+
+Plaintext: 0x74
+Key: 0b1100011100
+Ciphertext: 0xa9
+Time: 0.9133408069610596
+
+Plaintext: 0x65
+Key: 0b0110010001
+Ciphertext: 0x34
+Time: 0.4656660556793213
