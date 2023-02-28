@@ -1,11 +1,15 @@
 import pickle
 import time
 from bitstring import BitArray, BitStream
+from SDES import *
 
 true_keys = pickle.load( open( "true_keys.p", "rb" ) )
 
 print(true_keys)
 
-possible_keys = pickle.load( open( "possible_keys.p", "rb" ) )
+#true_keys_middle = pickle.load( open( "true_keys_middle.p", "rb" ) )
 
-#print(possible_keys)
+
+#test = dict(set.intersection(*(set(d.items()) for d in true_keys_middle)))
+
+#print(test[0])

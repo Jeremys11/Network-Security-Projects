@@ -1,6 +1,6 @@
 from bitstring import BitArray, BitStream
 
-##  Takes in 4bit input
+##  Takes in 8bit input - Split into 2 halves
 ##  Outputs 4 bit value by joining 2 2bit values
 def s_boxes(text):
 
@@ -12,22 +12,30 @@ def s_boxes(text):
     # Getting the indexing values i and j to read S1 and S2 tables
     temp1 = BitArray(length=2)
     temp2 = BitArray(length=2)
+    temp1a = BitArray(length=2)
+    temp2a = BitArray(length=2)
 
-    # Getting index i
+    # Getting index i -- Sbox 1
     temp1[0] = text[0]
     temp1[1] = text[3]
 
-    # Getting index j
+    # Getting index j -- Sbox 1
     temp2[0] = text[1]
     temp2[1] = text[2]
 
+    # Getting index i -- Sbox 2
+    temp1a[0] = text[4]
+    temp1a[1] = text[7]
+
+    # Getting index j -- Sbox 2
+    temp2a[0] = text[5]
+    temp2a[1] = text[6]
+
     # S1 Table Read
-    output1 = BitArray(length=2)
-    output1 = BitArray(bin(S1_table[temp1.uint][temp2.uint]))
+    output1 = BitArray(uint=S1_table[temp1.uint][temp2.uint],length=2)
 
     # S2 Table Read
-    output2 = BitArray(length=2)
-    output2 = BitArray(bin(S2_table[temp1.uint][temp2.uint]))
+    output2 = BitArray(uint=S2_table[temp1a.uint][temp2a.uint],length=2)
 
     # Permuting the value after the SBoxes
     output = post_sbox_permutation(output1,output2)
@@ -155,13 +163,8 @@ def S_DES(plaintext,key,decrpyt):
         subkeys.append(K)
 
     initial_permutation = permutation(plaintext,permute="initial")
-    if decrpyt == True:
-        L = initial_permutation[4:]
-        R = initial_permutation[:4]
-    else:
-        #Swap L and R on decryption
-        L = initial_permutation[:4]
-        R = initial_permutation[4:]
+    L = initial_permutation[:4]
+    R = initial_permutation[4:]
 
     #Looping for both plaintext and key flowcharts
     for i in range(4):
@@ -170,10 +173,9 @@ def S_DES(plaintext,key,decrpyt):
         else:
             L,R = plaintext_flowchart(L,R,subkeys[i])
 
-    if decrpyt == True:
-        final_text = BitArray(R+L,length=8) #Rearrange this way since swapped in beginning
-    else:
-        final_text = BitArray(L+R,length=8)
+    #Swapping R and L here makes this work
+    #I probably didn't swap properly at some point,  but this fixes the issue
+    final_text = BitArray(R+L,length=8)
 
     final_permutation = permutation(final_text,permute="inverse")
 
@@ -182,16 +184,6 @@ def S_DES(plaintext,key,decrpyt):
 ##  MAIN
 ##  
 if __name__ == "__main__":
-    #plaintext_ciphertext = {"0x42":"0x11", "0x72":"0x6d", "0x75":"0xfa", "0x74":"0xa9", "0x65":"0x34"}
-    #plaintext_key = {"0x12":"0x256"}
-    plaintext_key = {"0x0b":"0x256"}
-    for plaintext in plaintext_key:
-        output = S_DES(plaintext=BitStream(plaintext),key=BitStream(plaintext_key[plaintext]),decrpyt=True)
-        print("output: ", output)
 
-    #Double DES - Electronic Code Book Mode (ECB Mode)
-    #plaintext = "0x42"
-    #Keys = ["0x256","0x257"]
-    #output1 = S_DES(BitStream(plaintext),BitStream(Keys[1]))
-    #output2 = S_DES(BitStream(output1),BitStream(Keys[1]))
-    #print(output)
+    output = S_DES(BitArray(bin="10101000",length=8),BitArray(bin="0000000000",length=10),decrpyt=True)
+    print("output: ", output.bin)
