@@ -51,13 +51,12 @@ def meet_in_the_middle_attack(plaintext_ciphertext):
 
     #Finding all key pairs that result in the same partial cipher
     for i in range(len(encrypting_values)):
-        print(i)
         for j in range(len(decrypting_values)):
             if encrypting_values[i] == decrypting_values[j]:
                 possible_keys.append((i,j))
 
     #pickling incase of crash
-    pickle.dump(possible_keys, open( "possible_keys_middle.p", "wb"))
+    #pickle.dump(possible_keys, open( "possible_keys_middle.p", "wb"))
 
     #Iterating over all PT-CT pairs to find pair used to encrypt all PT-CT pairs
     true_keys = {}
@@ -75,22 +74,12 @@ def meet_in_the_middle_attack(plaintext_ciphertext):
     #Sorting true keys -- pair with value of 5 will be key that works for all PT-CT pairs -- true key
     true_keys = dict(sorted(true_keys.items(), key=lambda item: item[1]))
 
+    true_key = max(true_keys, key = true_keys.get)
 
-    pickle.dump(true_keys, open( "true_keys_middle.p", "wb"))
+    #pickle.dump(true_keys, open( "true_keys_middle.p", "wb"))
 
 
     total_time = time.time() - start_time
-    pickle.dump(total_time, open( "total_time_middle.p", "wb"))
+    #pickle.dump(total_time, open( "total_time_middle.p", "wb"))
     
-    return total_time
-
-
-## MAIN
-## Code outside of meet_in_the_middle_attack function
-plaintext_ciphertext = [[BitArray("0x42"),BitArray("0x11")], [BitArray("0x72"),BitArray("0x6d")], 
-                        [BitArray("0x75"),BitArray("0xfa")], [BitArray("0x74"),BitArray("0xa9")], 
-                        [BitArray("0x65"),BitArray("0x34")]]
-
-total_time = meet_in_the_middle_attack(plaintext_ciphertext)
-
-print(total_time)
+    return true_key, total_time

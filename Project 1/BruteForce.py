@@ -14,7 +14,7 @@ def brute_force(plaintext_ciphertext):
 
 
     for i in range(2 ** 10):
-        print(i)
+        #print(i)
         test_key1 = BitArray(uint=i,length=10)
         for j in range(2 ** 10):
 
@@ -26,30 +26,29 @@ def brute_force(plaintext_ciphertext):
                 possible_keys.append((test_key1.bin,test_key2.bin))
 
     half_time = time.time() - start_time
-    pickle.dump(possible_keys, open( "possible_keys.p", "wb"))
-    pickle.dump(half_time, open( "half_time.p", "wb"))
+    #pickle.dump(possible_keys, open( "possible_keys_brute.p", "wb"))
+    #pickle.dump(half_time, open( "half_time_brute.p", "wb"))
 
-    true_keys = []
-    plaintext = plaintext_ciphertext[2][0]
-    ciphertext = plaintext_ciphertext[2][1]
-    for key_pair in possible_keys:
-        output1 = S_DES(plaintext,BitArray(bin=key_pair[0],length=10),decrpyt=False)
-        output2 = S_DES(output1,BitArray(bin=key_pair[1],length=10),decrpyt=False)
-        if output2 == ciphertext:
-            true_keys.append((key_pair[0],key_pair[1]))
+    #Iterating over all PT-CT pairs to find pair used to encrypt all PT-CT pairs
+    true_keys = {}
+    for PC_pair in plaintext_ciphertext:
+        plaintext = PC_pair[0]
+        ciphertext = PC_pair[1]
+        for pair in possible_keys:
+            if S_DES(plaintext,BitArray(bin=pair[0],length=10),decrpyt=False) == S_DES(ciphertext,BitArray(bin=pair[1],length=10),decrpyt=True):
+                if pair in true_keys:
+                    true_keys[pair] += 1
+                else:
+                    true_keys[pair] = 1
 
+    #Sorting true keys -- pair with value of 5 will be key that works for all PT-CT pairs -- true key
+    true_keys = dict(sorted(true_keys.items(), key=lambda item: item[1]))
+
+    true_key = max(true_keys, key = true_keys.get)
 
     total_time = time.time() - start_time
-    pickle.dump(true_keys, open( "true_keys.p", "wb"))
-    pickle.dump(total_time, open( "total_time.p", "wb"))
+    #pickle.dump(true_keys, open( "true_keys_brute.p", "wb"))
+    #pickle.dump(total_time, open( "total_time_brute.p", "wb"))
 
 
-    return total_time,possible_keys
-
-plaintext_ciphertext = [[BitArray("0x42"),BitArray("0x11")], [BitArray("0x72"),BitArray("0x6d")], 
-                        [BitArray("0x75"),BitArray("0xfa")], [BitArray("0x74"),BitArray("0xa9")], 
-                        [BitArray("0x65"),BitArray("0x34")]]
-
-total_time, possible_keys = brute_force(plaintext_ciphertext)
-print(total_time)
-print(possible_keys)
+    return true_key, total_time

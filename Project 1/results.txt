@@ -1,0 +1,20 @@
+Meet-in-the-middle attack on Double SDES:
+
+    Meet-in-the-middle - Found Key Pair:  (746, 513)
+    Meet-in-the-middle - Total Time (seconds):  52.288700342178345
+
+Brute Force attack on Double SDES:
+
+    Brute Force - Found Key Pair:  ('1011101010', '1000000001')
+    Brute Force - Total Time (seconds):  2942.3602950572968
+
+Decrypted Messaged using Cipher Block Chaining on Double SDES:
+
+    If you can read this, you successfully decrypted this message. Congratulations!
+
+Weak Keys:
+
+    0000000000
+    0100111010
+    1011000101
+    1111111111
