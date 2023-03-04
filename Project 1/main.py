@@ -60,7 +60,7 @@ def testing_blockchaining():
 ##
 def testing_weakkeys():
 
-    weak_keys = testing_weakkeys()
+    weak_keys = weak_keys()
     print(weak_keys)
 
 ##  MAIN
