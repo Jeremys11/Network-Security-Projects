@@ -1,0 +1,95 @@
+cpsa4init
+create *.scm file
+run make
+
+
+First level of flowchart tends to not have error
+    Cannot prove identity -- not unique
+
+Multiple clients if no assumption of unique origination
+
+
+;;uniq-orig need to be defined in vars as well and defined in bottom
+;;cat seems to concatinate all elements into one
+;;nonces are of type text and uniq-orig -- must be in parameters in role that originates it
+
+;;(enc STUFF ENCRYPT_KEY)
+
+;;recive tickets as parameters under mesg
+;;send tickets as the whole thing
+
+;;non-orig usually symmetric or private keys never sent in a message but known to one or more parties
+
+
+Assignment Content
+
+    You are to model Protocol 1 from "Using Encryption for Authentication in Large Networks of 
+    Computers" using CPSA and verify whether or not the security properties of the protocol are 
+    satisfied. You will turn in your CPSA specification along with a paper identifying the skeletons
+    you used to analyze the protocol, the shapes resulting from your analysis and your interpretation 
+    of what the shapes mean in terms of validating the security properties (if the shapes validate a 
+    security property, state your reasoning why and if the shapes indicate that a security property 
+    fails to hold, describe how an attack could be mounted based on your shape. You should answer the 
+    following questions in your analysis to help you understand how to model the protocol:
+
+
+        What are the security goals of the protocol?
+
+
+
+        How many roles exist in the protocol?
+
+            3:
+                client
+                server
+                authentication server
+
+
+        How many messages are there?
+
+            5 Messages
+
+
+        What variables will you need?
+
+            identity client
+            identity server
+            identity authenication server
+
+            secret key between client and authenication server
+            secret key between server and authenication server
+            session key created by authenication server
+
+            nonce created by client
+            nonce created by server
+
+
+        What functions will you need?
+
+            enc -- encrypting data to be sent over network
+            hash -- modifying nonces to verify safe communication between server and client
+            cat -- makes everything into a list 
+
+        What are the assumptions being made?
+
+            Safe Environment in which to compute, such as is provided by a personal computer or 
+            would be by a secure shared operating system.
+
+            Network can support bandwidth of the exchange.
+
+            Client and Server exist in the same purview of Authentication Server.
+
+            Server is non-malicous and would not try and impersonate client.
+
+    (Points will be assigned for answers to the above questions, so make sure the answers to those 
+    questions are in your write-up.)
+
+
+    In addition, create a model in which you can demonstrate the attack from "Timestamps in Key 
+    Distribution Protocols" against Needham-Schroeder Protocol 1.
+
+
+    For an example of how to write up results, you may consult "Formal Methods Analysis of the 
+    Secure Remote Password Protocol". You need not write a publishable paper, but take note of how 
+    the properties are described and modeled and the results are written up.
+
