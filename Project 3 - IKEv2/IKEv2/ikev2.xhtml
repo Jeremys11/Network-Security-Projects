@@ -1,0 +1,328 @@
+<?xml version="1.0"?>
+<!-- CPSA 4.4.2 -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <title>IKEv2</title>
+ <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+ <style>
+  svg.diagram { border-width: 1px; border-style: solid }
+ </style>
+</head>
+<body>
+
+<pre>(herald &quot;IKEv2&quot;)
+(comment &quot;CPSA 4.4.2&quot;)
+(comment &quot;All input read from ikev2.scm&quot;)</pre>
+
+<p id="top">Trees: <a href="#t0">0</a> <a href="#t1">1</a>.</p>
+
+<p id="t0">Tree <a href="#top">0</a>, POV <a href="#k0">0</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='79.920pt' height='79.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 79.920 79.920' font-size='12.000'>
+  <text
+   x='39.960' y='26.040'
+   style='font-weight: bold; text-anchor: middle; fill: blue;'
+   onclick='window.open(&quot;#k0&quot;, &quot;_self&quot;)'>0</text>
+  </svg></div>
+
+<pre>(defprotocol ikev2 basic
+  (defrole initiator
+    (vars (IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr text)
+      (initiator responder certificateAuthority name)
+      (NonceInit NonceRecv text))
+    (trace (send (cat IKEheader SAi1 (pubk initiator) NonceInit))
+      (recv
+        (cat IKEheader SAr1 (pubk responder) NonceRecv
+          certificateAuthority))
+      (send
+        (cat IKEheader
+          (enc initiator
+            (cat initiator (pubk initiator)
+              (enc (hash initiator (pubk initiator))
+                (privk certificateAuthority))) certificateAuthority
+            responder (hash NonceRecv initiator) SAi2 TSi TSr
+            (hash NonceInit NonceRecv (pubk responder)
+              (pubk initiator)))))
+      (recv
+        (cat IKEheader
+          (enc responder
+            (cat responder (pubk responder)
+              (enc (hash responder (pubk responder))
+                (privk certificateAuthority)))
+            (hash NonceRecv initiator) SAr2 TSi TSr
+            (hash NonceInit NonceRecv (pubk initiator)
+              (pubk responder)))))))
+  (defrole responder
+    (vars (IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr text)
+      (initiator responder certificateAuthority name)
+      (NonceInit NonceRecv text))
+    (trace (recv (cat IKEheader SAi1 (pubk initiator) NonceInit))
+      (send
+        (cat IKEheader SAr1 (pubk responder) NonceRecv
+          certificateAuthority))
+      (recv
+        (cat IKEheader
+          (enc initiator
+            (cat initiator (pubk initiator)
+              (enc (hash initiator (pubk initiator))
+                (privk certificateAuthority))) certificateAuthority
+            responder (hash NonceInit responder) SAi2 TSi TSr
+            (hash NonceInit NonceRecv (pubk responder)
+              (pubk initiator)))))
+      (send
+        (cat IKEheader
+          (enc responder
+            (cat responder (pubk responder)
+              (enc (hash responder (pubk responder))
+                (privk certificateAuthority)))
+            (hash NonceInit responder) SAr2 TSi TSr
+            (hash NonceInit NonceRecv (pubk initiator)
+              (pubk responder)))))))
+  (defgenrule neqRl_indx
+    (forall ((x indx)) (implies (fact neq x x) (false))))
+  (defgenrule neqRl_strd
+    (forall ((x strd)) (implies (fact neq x x) (false))))
+  (defgenrule neqRl_mesg
+    (forall ((x mesg)) (implies (fact neq x x) (false)))))</pre>
+
+<p id="k0">Item <a href="#t0">0</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='79.920pt' height='379.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 79.920 379.920' font-size='12.000'>
+  <defs>
+   <marker
+    id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
+    refY='5'>
+    <path
+     d='M 0 0 5 5 0 10'
+     style='stroke-width: 2; fill: none; stroke: black;'/></marker>
+   </defs>
+  <line
+   x1='39.960' y1='114.960' x2='39.960' y2='339.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <g>
+   <title>(cat IKEheader (enc responder (cat responder (pubk responder) (enc (hash responder (pubk responder)) (privk certificateAuthority))) (hash NonceRecv initiator) SAr2 TSi TSr (hash NonceInit NonceRecv (pubk initiator) (pubk responder))))</title>
+   <circle style='fill: blue;' cx='39.960' cy='339.960' r='6.000'/></g>
+  <g>
+   <title>(cat IKEheader (enc initiator (cat initiator (pubk initiator) (enc (hash initiator (pubk initiator)) (privk certificateAuthority))) certificateAuthority responder (hash NonceRecv initiator) SAi2 TSi TSr (hash NonceInit NonceRecv (pubk responder) (pubk initiator))))</title>
+   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat IKEheader SAr1 (pubk responder) NonceRecv certificateAuthority)</title>
+   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+  <g><title>(cat IKEheader SAi1 (pubk initiator) NonceInit)</title>
+   <circle cx='39.960' cy='114.960' r='6.000'/></g>
+  <g>
+   <title>((IKEheader IKEheader) (SAi1 SAi1) (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr) (NonceInit NonceInit) (NonceRecv NonceRecv) (initiator initiator) (responder responder) (certificateAuthority certificateAuthority))</title>
+   <text
+    x='39.960' y='77.460' style='text-anchor: middle;'>initiator</text>
+   </g>
+  <text
+   x='39.960' y='39.960' style='text-anchor: middle;'>ikev2 0</text>
+  </svg></div>
+
+<pre>(defskeleton ikev2
+  (vars (NonceInit IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr NonceRecv text)
+    (initiator responder certificateAuthority name))
+  (defstrand initiator 4 (IKEheader IKEheader) (SAi1 SAi1) (SAr1 SAr1)
+    (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr) (NonceInit NonceInit)
+    (NonceRecv NonceRecv) (initiator initiator) (responder responder)
+    (certificateAuthority certificateAuthority))
+  (uniq-orig NonceInit)
+  (traces
+    ((send (cat IKEheader SAi1 (pubk initiator) NonceInit))
+      (recv
+        (cat IKEheader SAr1 (pubk responder) NonceRecv
+          certificateAuthority))
+      (send
+        (cat IKEheader
+          (enc initiator
+            (cat initiator (pubk initiator)
+              (enc (hash initiator (pubk initiator))
+                (privk certificateAuthority))) certificateAuthority
+            responder (hash NonceRecv initiator) SAi2 TSi TSr
+            (hash NonceInit NonceRecv (pubk responder)
+              (pubk initiator)))))
+      (recv
+        (cat IKEheader
+          (enc responder
+            (cat responder (pubk responder)
+              (enc (hash responder (pubk responder))
+                (privk certificateAuthority)))
+            (hash NonceRecv initiator) SAr2 TSi TSr
+            (hash NonceInit NonceRecv (pubk initiator)
+              (pubk responder)))))))
+  (label 0)
+  (realized)
+  (shape)
+  (maps
+    ((0)
+      ((initiator initiator) (responder responder)
+        (certificateAuthority certificateAuthority)
+        (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
+        (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
+        (NonceRecv NonceRecv))))
+  (origs (NonceInit (0 0))))</pre>
+
+<p id="t1">Tree <a href="#top">1</a>, POV <a href="#k1">1</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='79.920pt' height='79.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 79.920 79.920' font-size='12.000'>
+  <text
+   x='39.960' y='26.040'
+   style='font-weight: bold; text-anchor: middle; fill: blue;'
+   onclick='window.open(&quot;#k1&quot;, &quot;_self&quot;)'>1</text>
+  </svg></div>
+
+<pre>(defprotocol ikev2 basic
+  (defrole initiator
+    (vars (IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr text)
+      (initiator responder certificateAuthority name)
+      (NonceInit NonceRecv text))
+    (trace (send (cat IKEheader SAi1 (pubk initiator) NonceInit))
+      (recv
+        (cat IKEheader SAr1 (pubk responder) NonceRecv
+          certificateAuthority))
+      (send
+        (cat IKEheader
+          (enc initiator
+            (cat initiator (pubk initiator)
+              (enc (hash initiator (pubk initiator))
+                (privk certificateAuthority))) certificateAuthority
+            responder (hash NonceRecv initiator) SAi2 TSi TSr
+            (hash NonceInit NonceRecv (pubk responder)
+              (pubk initiator)))))
+      (recv
+        (cat IKEheader
+          (enc responder
+            (cat responder (pubk responder)
+              (enc (hash responder (pubk responder))
+                (privk certificateAuthority)))
+            (hash NonceRecv initiator) SAr2 TSi TSr
+            (hash NonceInit NonceRecv (pubk initiator)
+              (pubk responder)))))))
+  (defrole responder
+    (vars (IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr text)
+      (initiator responder certificateAuthority name)
+      (NonceInit NonceRecv text))
+    (trace (recv (cat IKEheader SAi1 (pubk initiator) NonceInit))
+      (send
+        (cat IKEheader SAr1 (pubk responder) NonceRecv
+          certificateAuthority))
+      (recv
+        (cat IKEheader
+          (enc initiator
+            (cat initiator (pubk initiator)
+              (enc (hash initiator (pubk initiator))
+                (privk certificateAuthority))) certificateAuthority
+            responder (hash NonceInit responder) SAi2 TSi TSr
+            (hash NonceInit NonceRecv (pubk responder)
+              (pubk initiator)))))
+      (send
+        (cat IKEheader
+          (enc responder
+            (cat responder (pubk responder)
+              (enc (hash responder (pubk responder))
+                (privk certificateAuthority)))
+            (hash NonceInit responder) SAr2 TSi TSr
+            (hash NonceInit NonceRecv (pubk initiator)
+              (pubk responder)))))))
+  (defgenrule neqRl_indx
+    (forall ((x indx)) (implies (fact neq x x) (false))))
+  (defgenrule neqRl_strd
+    (forall ((x strd)) (implies (fact neq x x) (false))))
+  (defgenrule neqRl_mesg
+    (forall ((x mesg)) (implies (fact neq x x) (false)))))</pre>
+
+<p id="k1">Item <a href="#t1">1</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='79.920pt' height='379.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 79.920 379.920' font-size='12.000'>
+  <defs>
+   <marker
+    id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
+    refY='5'>
+    <path
+     d='M 0 0 5 5 0 10'
+     style='stroke-width: 2; fill: none; stroke: black;'/></marker>
+   </defs>
+  <line
+   x1='39.960' y1='114.960' x2='39.960' y2='339.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <g>
+   <title>(cat IKEheader (enc responder (cat responder (pubk responder) (enc (hash responder (pubk responder)) (privk certificateAuthority))) (hash NonceInit responder) SAr2 TSi TSr (hash NonceInit NonceRecv (pubk initiator) (pubk responder))))</title>
+   <circle cx='39.960' cy='339.960' r='6.000'/></g>
+  <g>
+   <title>(cat IKEheader (enc initiator (cat initiator (pubk initiator) (enc (hash initiator (pubk initiator)) (privk certificateAuthority))) certificateAuthority responder (hash NonceInit responder) SAi2 TSi TSr (hash NonceInit NonceRecv (pubk responder) (pubk initiator))))</title>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
+  <g>
+   <title>(cat IKEheader SAr1 (pubk responder) NonceRecv certificateAuthority)</title>
+   <circle cx='39.960' cy='189.960' r='6.000'/></g>
+  <g><title>(cat IKEheader SAi1 (pubk initiator) NonceInit)</title>
+   <circle style='fill: blue;' cx='39.960' cy='114.960' r='6.000'/></g>
+  <g>
+   <title>((IKEheader IKEheader) (SAi1 SAi1) (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr) (NonceInit NonceInit) (NonceRecv NonceRecv) (initiator initiator) (responder responder) (certificateAuthority certificateAuthority))</title>
+   <text
+    x='39.960' y='77.460' style='text-anchor: middle;'>responder</text>
+   </g>
+  <text
+   x='39.960' y='39.960' style='text-anchor: middle;'>ikev2 1</text>
+  </svg></div>
+
+<pre>(defskeleton ikev2
+  (vars (NonceRecv IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr NonceInit text)
+    (initiator responder certificateAuthority name))
+  (defstrand responder 4 (IKEheader IKEheader) (SAi1 SAi1) (SAr1 SAr1)
+    (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr) (NonceInit NonceInit)
+    (NonceRecv NonceRecv) (initiator initiator) (responder responder)
+    (certificateAuthority certificateAuthority))
+  (uniq-orig NonceRecv)
+  (traces
+    ((recv (cat IKEheader SAi1 (pubk initiator) NonceInit))
+      (send
+        (cat IKEheader SAr1 (pubk responder) NonceRecv
+          certificateAuthority))
+      (recv
+        (cat IKEheader
+          (enc initiator
+            (cat initiator (pubk initiator)
+              (enc (hash initiator (pubk initiator))
+                (privk certificateAuthority))) certificateAuthority
+            responder (hash NonceInit responder) SAi2 TSi TSr
+            (hash NonceInit NonceRecv (pubk responder)
+              (pubk initiator)))))
+      (send
+        (cat IKEheader
+          (enc responder
+            (cat responder (pubk responder)
+              (enc (hash responder (pubk responder))
+                (privk certificateAuthority)))
+            (hash NonceInit responder) SAr2 TSi TSr
+            (hash NonceInit NonceRecv (pubk initiator)
+              (pubk responder)))))))
+  (label 1)
+  (realized)
+  (shape)
+  (maps
+    ((0)
+      ((initiator initiator) (responder responder)
+        (certificateAuthority certificateAuthority)
+        (NonceRecv NonceRecv) (IKEheader IKEheader) (SAi1 SAi1)
+        (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
+        (NonceInit NonceInit))))
+  (origs (NonceRecv (0 1))))</pre>
+
+</body>
+</html>

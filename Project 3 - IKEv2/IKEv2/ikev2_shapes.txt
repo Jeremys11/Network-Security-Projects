@@ -1,0 +1,218 @@
+(comment "CPSA 4.4.2")
+(comment "Extracted shapes")
+
+(herald "IKEv2")
+
+(comment "CPSA 4.4.2")
+
+(comment "All input read from ikev2.scm")
+
+(defprotocol ikev2 basic
+  (defrole initiator
+    (vars (IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr text)
+      (initiator responder certificateAuthority name)
+      (NonceInit NonceRecv text))
+    (trace (send (cat IKEheader SAi1 (pubk initiator) NonceInit))
+      (recv
+        (cat IKEheader SAr1 (pubk responder) NonceRecv
+          certificateAuthority))
+      (send
+        (cat IKEheader
+          (enc initiator
+            (cat initiator (pubk initiator)
+              (enc (hash initiator (pubk initiator))
+                (privk certificateAuthority))) certificateAuthority
+            responder (hash NonceRecv initiator) SAi2 TSi TSr
+            (hash NonceInit NonceRecv (pubk responder)
+              (pubk initiator)))))
+      (recv
+        (cat IKEheader
+          (enc responder
+            (cat responder (pubk responder)
+              (enc (hash responder (pubk responder))
+                (privk certificateAuthority)))
+            (hash NonceRecv initiator) SAr2 TSi TSr
+            (hash NonceInit NonceRecv (pubk initiator)
+              (pubk responder)))))))
+  (defrole responder
+    (vars (IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr text)
+      (initiator responder certificateAuthority name)
+      (NonceInit NonceRecv text))
+    (trace (recv (cat IKEheader SAi1 (pubk initiator) NonceInit))
+      (send
+        (cat IKEheader SAr1 (pubk responder) NonceRecv
+          certificateAuthority))
+      (recv
+        (cat IKEheader
+          (enc initiator
+            (cat initiator (pubk initiator)
+              (enc (hash initiator (pubk initiator))
+                (privk certificateAuthority))) certificateAuthority
+            responder (hash NonceInit responder) SAi2 TSi TSr
+            (hash NonceInit NonceRecv (pubk responder)
+              (pubk initiator)))))
+      (send
+        (cat IKEheader
+          (enc responder
+            (cat responder (pubk responder)
+              (enc (hash responder (pubk responder))
+                (privk certificateAuthority)))
+            (hash NonceInit responder) SAr2 TSi TSr
+            (hash NonceInit NonceRecv (pubk initiator)
+              (pubk responder)))))))
+  (defgenrule neqRl_indx
+    (forall ((x indx)) (implies (fact neq x x) (false))))
+  (defgenrule neqRl_strd
+    (forall ((x strd)) (implies (fact neq x x) (false))))
+  (defgenrule neqRl_mesg
+    (forall ((x mesg)) (implies (fact neq x x) (false)))))
+
+(defskeleton ikev2
+  (vars (NonceInit IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr NonceRecv text)
+    (initiator responder certificateAuthority name))
+  (defstrand initiator 4 (IKEheader IKEheader) (SAi1 SAi1) (SAr1 SAr1)
+    (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr) (NonceInit NonceInit)
+    (NonceRecv NonceRecv) (initiator initiator) (responder responder)
+    (certificateAuthority certificateAuthority))
+  (uniq-orig NonceInit)
+  (traces
+    ((send (cat IKEheader SAi1 (pubk initiator) NonceInit))
+      (recv
+        (cat IKEheader SAr1 (pubk responder) NonceRecv
+          certificateAuthority))
+      (send
+        (cat IKEheader
+          (enc initiator
+            (cat initiator (pubk initiator)
+              (enc (hash initiator (pubk initiator))
+                (privk certificateAuthority))) certificateAuthority
+            responder (hash NonceRecv initiator) SAi2 TSi TSr
+            (hash NonceInit NonceRecv (pubk responder)
+              (pubk initiator)))))
+      (recv
+        (cat IKEheader
+          (enc responder
+            (cat responder (pubk responder)
+              (enc (hash responder (pubk responder))
+                (privk certificateAuthority)))
+            (hash NonceRecv initiator) SAr2 TSi TSr
+            (hash NonceInit NonceRecv (pubk initiator)
+              (pubk responder)))))))
+  (label 0)
+  (realized)
+  (shape)
+  (maps
+    ((0)
+      ((initiator initiator) (responder responder)
+        (certificateAuthority certificateAuthority)
+        (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
+        (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
+        (NonceRecv NonceRecv))))
+  (origs (NonceInit (0 0))))
+
+(comment "Nothing left to do")
+
+(defprotocol ikev2 basic
+  (defrole initiator
+    (vars (IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr text)
+      (initiator responder certificateAuthority name)
+      (NonceInit NonceRecv text))
+    (trace (send (cat IKEheader SAi1 (pubk initiator) NonceInit))
+      (recv
+        (cat IKEheader SAr1 (pubk responder) NonceRecv
+          certificateAuthority))
+      (send
+        (cat IKEheader
+          (enc initiator
+            (cat initiator (pubk initiator)
+              (enc (hash initiator (pubk initiator))
+                (privk certificateAuthority))) certificateAuthority
+            responder (hash NonceRecv initiator) SAi2 TSi TSr
+            (hash NonceInit NonceRecv (pubk responder)
+              (pubk initiator)))))
+      (recv
+        (cat IKEheader
+          (enc responder
+            (cat responder (pubk responder)
+              (enc (hash responder (pubk responder))
+                (privk certificateAuthority)))
+            (hash NonceRecv initiator) SAr2 TSi TSr
+            (hash NonceInit NonceRecv (pubk initiator)
+              (pubk responder)))))))
+  (defrole responder
+    (vars (IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr text)
+      (initiator responder certificateAuthority name)
+      (NonceInit NonceRecv text))
+    (trace (recv (cat IKEheader SAi1 (pubk initiator) NonceInit))
+      (send
+        (cat IKEheader SAr1 (pubk responder) NonceRecv
+          certificateAuthority))
+      (recv
+        (cat IKEheader
+          (enc initiator
+            (cat initiator (pubk initiator)
+              (enc (hash initiator (pubk initiator))
+                (privk certificateAuthority))) certificateAuthority
+            responder (hash NonceInit responder) SAi2 TSi TSr
+            (hash NonceInit NonceRecv (pubk responder)
+              (pubk initiator)))))
+      (send
+        (cat IKEheader
+          (enc responder
+            (cat responder (pubk responder)
+              (enc (hash responder (pubk responder))
+                (privk certificateAuthority)))
+            (hash NonceInit responder) SAr2 TSi TSr
+            (hash NonceInit NonceRecv (pubk initiator)
+              (pubk responder)))))))
+  (defgenrule neqRl_indx
+    (forall ((x indx)) (implies (fact neq x x) (false))))
+  (defgenrule neqRl_strd
+    (forall ((x strd)) (implies (fact neq x x) (false))))
+  (defgenrule neqRl_mesg
+    (forall ((x mesg)) (implies (fact neq x x) (false)))))
+
+(defskeleton ikev2
+  (vars (NonceRecv IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr NonceInit text)
+    (initiator responder certificateAuthority name))
+  (defstrand responder 4 (IKEheader IKEheader) (SAi1 SAi1) (SAr1 SAr1)
+    (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr) (NonceInit NonceInit)
+    (NonceRecv NonceRecv) (initiator initiator) (responder responder)
+    (certificateAuthority certificateAuthority))
+  (uniq-orig NonceRecv)
+  (traces
+    ((recv (cat IKEheader SAi1 (pubk initiator) NonceInit))
+      (send
+        (cat IKEheader SAr1 (pubk responder) NonceRecv
+          certificateAuthority))
+      (recv
+        (cat IKEheader
+          (enc initiator
+            (cat initiator (pubk initiator)
+              (enc (hash initiator (pubk initiator))
+                (privk certificateAuthority))) certificateAuthority
+            responder (hash NonceInit responder) SAi2 TSi TSr
+            (hash NonceInit NonceRecv (pubk responder)
+              (pubk initiator)))))
+      (send
+        (cat IKEheader
+          (enc responder
+            (cat responder (pubk responder)
+              (enc (hash responder (pubk responder))
+                (privk certificateAuthority)))
+            (hash NonceInit responder) SAr2 TSi TSr
+            (hash NonceInit NonceRecv (pubk initiator)
+              (pubk responder)))))))
+  (label 1)
+  (realized)
+  (shape)
+  (maps
+    ((0)
+      ((initiator initiator) (responder responder)
+        (certificateAuthority certificateAuthority)
+        (NonceRecv NonceRecv) (IKEheader IKEheader) (SAi1 SAi1)
+        (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
+        (NonceInit NonceInit))))
+  (origs (NonceRecv (0 1))))
+
+(comment "Nothing left to do")
