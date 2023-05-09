@@ -6,9 +6,10 @@ Assignment Content
     The IKEv2 protocol defined in RFC 7296 performs authentication and establishes keys for use with 
     IPSec. For this assignment, you are to model and verify the security of the initial set-up of the 
     IKE SA and determine if it is secure. There are several ways that an IKE permits authentication, 
-    such as with certificates, with preplaced keys, and mixed modes (where one party is using a 
-    preplaced key and the other is using a certificate. You only need to model the basic case where 
-    both parties are using certificates. You need not model the approaches for protecting against 
+    such as with certificates. You only need to model the basic case where 
+    both parties are using certificates. 
+    
+    You need not model the approaches for protecting against 
     resource exhaustion attacks using cookies. As you are only verifying authentication and the 
     establishment of the initial IKE SA, you need not model the creation of a child SA. 
     (Hint: Your model should only consist of 4 messages.)

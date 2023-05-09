@@ -31,8 +31,8 @@
                     (enc
                         initiator 
                         (Certificate initiator (pubk initiator) certificateAuthority) 
-                        certificateAuthority
-                        responder 
+                        certificateAuthority ;;CERTAUTH
+                        responder
                         (hash NonceRecv initiator) ;;AUTH INIT = nonceRecv + IDInit
                         SAi2 
                         TSi 
@@ -50,9 +50,9 @@
                         responder 
                         (Certificate responder (pubk responder) certificateAuthority) 
                         (hash NonceRecv initiator) ;;AUTH INIT = responderNonce + IDInit
-                        SAr2 
-                        TSi 
-                        TSr 
+                        SAr2
+                        TSi
+                        TSr
                         (hash NonceInit NonceRecv (pubk initiator) (pubk responder))
                     )
                 )
@@ -80,7 +80,7 @@
                     (enc 
                         initiator 
                         (Certificate initiator (pubk initiator) certificateAuthority) 
-                        certificateAuthority 
+                        certificateAuthority ;;CERTAUTH
                         responder 
                         (hash NonceInit responder) ;;AUTH Responder = NonceInit + IDResponder 
                         SAi2 
@@ -123,6 +123,7 @@
         (initiator initiator) (responder responder) (certificateAuthority certificateAuthority)
         (NonceInit NonceInit)
     )
+    (non-orig (privk certificateAuthority))
     (uniq-orig NonceInit)
 )
 
@@ -137,5 +138,6 @@
         (initiator initiator) (responder responder) (certificateAuthority certificateAuthority)
         (NonceRecv NonceRecv) 
     )
+    (non-orig (privk certificateAuthority))
     (uniq-orig NonceRecv)
 )
