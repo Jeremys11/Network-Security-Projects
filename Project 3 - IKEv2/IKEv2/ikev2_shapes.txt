@@ -33,7 +33,8 @@
                 (privk certificateAuthority)))
             (hash NonceRecv initiator) SAr2 TSi TSr
             (hash NonceInit NonceRecv (pubk initiator)
-              (pubk responder)))))))
+              (pubk responder))))))
+    (uniq-orig NonceInit))
   (defrole responder
     (vars (IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr data)
       (initiator responder certificateAuthority name)
@@ -59,7 +60,8 @@
                 (privk certificateAuthority)))
             (hash NonceInit responder) SAr2 TSi TSr
             (hash NonceInit NonceRecv (pubk initiator)
-              (pubk responder)))))))
+              (pubk responder))))))
+    (uniq-orig NonceRecv))
   (defgenrule neqRl_indx
     (forall ((x indx)) (implies (fact neq x x) (false))))
   (defgenrule neqRl_strd
@@ -170,7 +172,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((1 2) (0 3)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceInit-0)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash responder (pubk responder)) (privk certificateAuthority))
     (0 3))
@@ -221,7 +223,7 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit-0 (1 0)) (NonceInit (0 0))))
 
 (defskeleton ikev2
   (vars
@@ -240,7 +242,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((0 2) (1 2)) ((1 3) (0 3)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0)
   (operation encryption-test (displaced 2 0 initiator 3)
     (enc (hash initiator-0 (pubk initiator-0))
       (privk certificateAuthority)) (1 2))
@@ -300,7 +302,7 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit (0 0)) (NonceRecv-0 (1 1))))
 
 (defskeleton ikev2
   (vars
@@ -327,7 +329,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((1 3) (0 3)) ((2 2) (1 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceInit-1)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash initiator-0 (pubk initiator-0))
       (privk certificateAuthority)) (1 2))
@@ -401,7 +403,7 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit-1 (2 0)) (NonceRecv-0 (1 1)) (NonceInit (0 0))))
 
 (defskeleton ikev2
   (vars
@@ -426,7 +428,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((0 2) (2 2)) ((1 3) (0 3)) ((2 3) (1 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1)
   (operation encryption-test (displaced 3 0 initiator 3)
     (enc (hash initiator-1 (pubk initiator-1))
       (privk certificateAuthority)) (2 2))
@@ -509,7 +511,7 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit (0 0)) (NonceRecv-1 (2 1)) (NonceRecv-0 (1 1))))
 
 (defskeleton ikev2
   (vars
@@ -541,7 +543,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 2) (2 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceInit-2)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash initiator-1 (pubk initiator-1))
       (privk certificateAuthority)) (2 2))
@@ -638,7 +640,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit-2 (3 0)) (NonceRecv-1 (2 1)) (NonceRecv-0 (1 1))
+    (NonceInit (0 0))))
 
 (defskeleton ikev2
   (vars
@@ -671,7 +674,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((0 2) (3 2)) ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2)
   (operation encryption-test (displaced 4 0 initiator 3)
     (enc (hash initiator-2 (pubk initiator-2))
       (privk certificateAuthority)) (3 2))
@@ -777,7 +780,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit (0 0)) (NonceRecv-2 (3 1)) (NonceRecv-1 (2 1))
+    (NonceRecv-0 (1 1))))
 
 (defskeleton ikev2
   (vars
@@ -815,7 +819,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)) ((4 2) (3 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceInit-3)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash initiator-2 (pubk initiator-2))
       (privk certificateAuthority)) (3 2))
@@ -935,7 +939,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit-3 (4 0)) (NonceRecv-2 (3 1)) (NonceRecv-1 (2 1))
+    (NonceRecv-0 (1 1)) (NonceInit (0 0))))
 
 (defskeleton ikev2
   (vars
@@ -974,7 +979,7 @@
   (precedes ((0 2) (4 2)) ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2))
     ((4 3) (3 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3)
   (operation encryption-test (displaced 5 0 initiator 3)
     (enc (hash initiator-3 (pubk initiator-3))
       (privk certificateAuthority)) (4 2))
@@ -1103,7 +1108,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit (0 0)) (NonceRecv-3 (4 1)) (NonceRecv-2 (3 1))
+    (NonceRecv-1 (2 1)) (NonceRecv-0 (1 1))))
 
 (defskeleton ikev2
   (vars
@@ -1149,7 +1155,8 @@
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)) ((4 3) (3 2))
     ((5 2) (4 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceInit-4)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash initiator-3 (pubk initiator-3))
       (privk certificateAuthority)) (4 2))
@@ -1292,7 +1299,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit-4 (5 0)) (NonceRecv-3 (4 1)) (NonceRecv-2 (3 1))
+    (NonceRecv-1 (2 1)) (NonceRecv-0 (1 1)) (NonceInit (0 0))))
 
 (defskeleton ikev2
   (vars
@@ -1338,7 +1346,8 @@
   (precedes ((0 2) (5 2)) ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2))
     ((4 3) (3 2)) ((5 3) (4 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceRecv-4)
   (operation encryption-test (displaced 6 0 initiator 3)
     (enc (hash initiator-4 (pubk initiator-4))
       (privk certificateAuthority)) (5 2))
@@ -1490,7 +1499,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit (0 0)) (NonceRecv-4 (5 1)) (NonceRecv-3 (4 1))
+    (NonceRecv-2 (3 1)) (NonceRecv-1 (2 1)) (NonceRecv-0 (1 1))))
 
 (defskeleton ikev2
   (vars
@@ -1542,7 +1552,8 @@
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)) ((4 3) (3 2))
     ((5 3) (4 2)) ((6 2) (5 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceRecv-4 NonceInit-5)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash initiator-4 (pubk initiator-4))
       (privk certificateAuthority)) (5 2))
@@ -1708,7 +1719,9 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit-5 (6 0)) (NonceRecv-4 (5 1)) (NonceRecv-3 (4 1))
+    (NonceRecv-2 (3 1)) (NonceRecv-1 (2 1)) (NonceRecv-0 (1 1))
+    (NonceInit (0 0))))
 
 (defskeleton ikev2
   (vars
@@ -1760,7 +1773,8 @@
   (precedes ((0 2) (6 2)) ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2))
     ((4 3) (3 2)) ((5 3) (4 2)) ((6 3) (5 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceRecv-4 NonceRecv-5)
   (operation encryption-test (displaced 7 0 initiator 3)
     (enc (hash initiator-5 (pubk initiator-5))
       (privk certificateAuthority)) (6 2))
@@ -1935,7 +1949,9 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit (0 0)) (NonceRecv-5 (6 1)) (NonceRecv-4 (5 1))
+    (NonceRecv-3 (4 1)) (NonceRecv-2 (3 1)) (NonceRecv-1 (2 1))
+    (NonceRecv-0 (1 1))))
 
 (defskeleton ikev2
   (vars
@@ -1993,7 +2009,8 @@
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)) ((4 3) (3 2))
     ((5 3) (4 2)) ((6 3) (5 2)) ((7 2) (6 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceRecv-4 NonceRecv-5 NonceInit-6)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash initiator-5 (pubk initiator-5))
       (privk certificateAuthority)) (6 2))
@@ -2182,6 +2199,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))
+  (origs (NonceInit-6 (7 0)) (NonceRecv-5 (6 1)) (NonceRecv-4 (5 1))
+    (NonceRecv-3 (4 1)) (NonceRecv-2 (3 1)) (NonceRecv-1 (2 1))
+    (NonceRecv-0 (1 1)) (NonceInit (0 0))))
 
 (comment "Strand bound exceeded--aborting run")

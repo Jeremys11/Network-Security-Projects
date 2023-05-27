@@ -192,7 +192,8 @@
                 (privk certificateAuthority)))
             (hash NonceRecv initiator) SAr2 TSi TSr
             (hash NonceInit NonceRecv (pubk initiator)
-              (pubk responder)))))))
+              (pubk responder))))))
+    (uniq-orig NonceInit))
   (defrole responder
     (vars (IKEheader SAi1 SAr1 SAi2 SAr2 TSi TSr data)
       (initiator responder certificateAuthority name)
@@ -218,7 +219,8 @@
                 (privk certificateAuthority)))
             (hash NonceInit responder) SAr2 TSi TSr
             (hash NonceInit NonceRecv (pubk initiator)
-              (pubk responder)))))))
+              (pubk responder))))))
+    (uniq-orig NonceRecv))
   (defgenrule neqRl_indx
     (forall ((x indx)) (implies (fact neq x x) (false))))
   (defgenrule neqRl_strd
@@ -463,7 +465,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((1 2) (0 3)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceInit-0)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash responder (pubk responder)) (privk certificateAuthority))
     (0 3))
@@ -514,7 +516,7 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit-0 (1 0)) (NonceInit (0 0))))</pre>
 
 <p id="k3">Item <a href="#t0">3</a>, Parent: <a href="#k0">0</a>, Children: <a href="#k4">4</a> <a href="#k5">5</a> <a href="#k6">6</a>.</p>
 
@@ -594,7 +596,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((1 3) (0 3)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0)
   (operation encryption-test (added-strand responder 4)
     (enc (hash responder (pubk responder)) (privk certificateAuthority))
     (0 3))
@@ -729,7 +731,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((0 2) (1 2)) ((1 3) (0 3)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0)
   (operation encryption-test (displaced 2 0 initiator 3)
     (enc (hash initiator-0 (pubk initiator-0))
       (privk certificateAuthority)) (1 2))
@@ -789,7 +791,7 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit (0 0)) (NonceRecv-0 (1 1))))</pre>
 
 <p id="k5">Item <a href="#t0">5</a>, Parent: <a href="#k3">3</a>.</p>
 
@@ -897,7 +899,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((1 3) (0 3)) ((2 2) (1 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceInit-1)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash initiator-0 (pubk initiator-0))
       (privk certificateAuthority)) (1 2))
@@ -971,7 +973,7 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit-1 (2 0)) (NonceRecv-0 (1 1)) (NonceInit (0 0))))</pre>
 
 <p id="k6">Item <a href="#t0">6</a>, Parent: <a href="#k3">3</a>, Children: <a href="#k7">7</a> <a href="#k8">8</a> <a href="#k9">9</a>.</p>
 
@@ -1082,7 +1084,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((1 3) (0 3)) ((2 3) (1 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1)
   (operation encryption-test (added-strand responder 4)
     (enc (hash initiator-0 (pubk initiator-0))
       (privk certificateAuthority)) (1 2))
@@ -1269,7 +1271,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((0 2) (2 2)) ((1 3) (0 3)) ((2 3) (1 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1)
   (operation encryption-test (displaced 3 0 initiator 3)
     (enc (hash initiator-1 (pubk initiator-1))
       (privk certificateAuthority)) (2 2))
@@ -1352,7 +1354,7 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit (0 0)) (NonceRecv-1 (2 1)) (NonceRecv-0 (1 1))))</pre>
 
 <p id="k8">Item <a href="#t0">8</a>, Parent: <a href="#k6">6</a>.</p>
 
@@ -1488,7 +1490,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 2) (2 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceInit-2)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash initiator-1 (pubk initiator-1))
       (privk certificateAuthority)) (2 2))
@@ -1585,7 +1587,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit-2 (3 0)) (NonceRecv-1 (2 1)) (NonceRecv-0 (1 1))
+    (NonceInit (0 0))))</pre>
 
 <p id="k9">Item <a href="#t0">9</a>, Parent: <a href="#k6">6</a>, Children: <a href="#k10">10</a> <a href="#k11">11</a> <a href="#k12">12</a>.</p>
 
@@ -1725,7 +1728,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2)
   (operation encryption-test (added-strand responder 4)
     (enc (hash initiator-1 (pubk initiator-1))
       (privk certificateAuthority)) (2 2))
@@ -1966,7 +1969,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((0 2) (3 2)) ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2)
   (operation encryption-test (displaced 4 0 initiator 3)
     (enc (hash initiator-2 (pubk initiator-2))
       (privk certificateAuthority)) (3 2))
@@ -2072,7 +2075,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit (0 0)) (NonceRecv-2 (3 1)) (NonceRecv-1 (2 1))
+    (NonceRecv-0 (1 1))))</pre>
 
 <p id="k11">Item <a href="#t0">11</a>, Parent: <a href="#k9">9</a>.</p>
 
@@ -2237,7 +2241,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)) ((4 2) (3 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceInit-3)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash initiator-2 (pubk initiator-2))
       (privk certificateAuthority)) (3 2))
@@ -2357,7 +2361,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit-3 (4 0)) (NonceRecv-2 (3 1)) (NonceRecv-1 (2 1))
+    (NonceRecv-0 (1 1)) (NonceInit (0 0))))</pre>
 
 <p id="k12">Item <a href="#t0">12</a>, Parent: <a href="#k9">9</a>, Children: <a href="#k13">13</a> <a href="#k14">14</a> <a href="#k15">15</a>.</p>
 
@@ -2525,7 +2530,7 @@
     (certificateAuthority certificateAuthority))
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)) ((4 3) (3 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3)
   (operation encryption-test (added-strand responder 4)
     (enc (hash initiator-2 (pubk initiator-2))
       (privk certificateAuthority)) (3 2))
@@ -2818,7 +2823,7 @@
   (precedes ((0 2) (4 2)) ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2))
     ((4 3) (3 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3)
   (operation encryption-test (displaced 5 0 initiator 3)
     (enc (hash initiator-3 (pubk initiator-3))
       (privk certificateAuthority)) (4 2))
@@ -2947,7 +2952,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit (0 0)) (NonceRecv-3 (4 1)) (NonceRecv-2 (3 1))
+    (NonceRecv-1 (2 1)) (NonceRecv-0 (1 1))))</pre>
 
 <p id="k14">Item <a href="#t0">14</a>, Parent: <a href="#k12">12</a>.</p>
 
@@ -3143,7 +3149,8 @@
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)) ((4 3) (3 2))
     ((5 2) (4 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceInit-4)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash initiator-3 (pubk initiator-3))
       (privk certificateAuthority)) (4 2))
@@ -3286,7 +3293,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit-4 (5 0)) (NonceRecv-3 (4 1)) (NonceRecv-2 (3 1))
+    (NonceRecv-1 (2 1)) (NonceRecv-0 (1 1)) (NonceInit (0 0))))</pre>
 
 <p id="k15">Item <a href="#t0">15</a>, Parent: <a href="#k12">12</a>, Children: <a href="#k16">16</a> <a href="#k17">17</a> <a href="#k18">18</a>.</p>
 
@@ -3485,7 +3493,8 @@
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)) ((4 3) (3 2))
     ((5 3) (4 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceRecv-4)
   (operation encryption-test (added-strand responder 4)
     (enc (hash initiator-3 (pubk initiator-3))
       (privk certificateAuthority)) (4 2))
@@ -3831,7 +3840,8 @@
   (precedes ((0 2) (5 2)) ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2))
     ((4 3) (3 2)) ((5 3) (4 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceRecv-4)
   (operation encryption-test (displaced 6 0 initiator 3)
     (enc (hash initiator-4 (pubk initiator-4))
       (privk certificateAuthority)) (5 2))
@@ -3983,7 +3993,8 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit (0 0)) (NonceRecv-4 (5 1)) (NonceRecv-3 (4 1))
+    (NonceRecv-2 (3 1)) (NonceRecv-1 (2 1)) (NonceRecv-0 (1 1))))</pre>
 
 <p id="k17">Item <a href="#t0">17</a>, Parent: <a href="#k15">15</a>.</p>
 
@@ -4208,7 +4219,8 @@
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)) ((4 3) (3 2))
     ((5 3) (4 2)) ((6 2) (5 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceRecv-4 NonceInit-5)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash initiator-4 (pubk initiator-4))
       (privk certificateAuthority)) (5 2))
@@ -4374,7 +4386,9 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit-5 (6 0)) (NonceRecv-4 (5 1)) (NonceRecv-3 (4 1))
+    (NonceRecv-2 (3 1)) (NonceRecv-1 (2 1)) (NonceRecv-0 (1 1))
+    (NonceInit (0 0))))</pre>
 
 <p id="k18">Item <a href="#t0">18</a>, Parent: <a href="#k15">15</a>, Children: <a href="#k19">19</a> <a href="#k20">20</a> <a href="#k21">21</a>.</p>
 
@@ -4602,7 +4616,8 @@
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)) ((4 3) (3 2))
     ((5 3) (4 2)) ((6 3) (5 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceRecv-4 NonceRecv-5)
   (operation encryption-test (added-strand responder 4)
     (enc (hash initiator-4 (pubk initiator-4))
       (privk certificateAuthority)) (5 2))
@@ -5000,7 +5015,8 @@
   (precedes ((0 2) (6 2)) ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2))
     ((4 3) (3 2)) ((5 3) (4 2)) ((6 3) (5 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceRecv-4 NonceRecv-5)
   (operation encryption-test (displaced 7 0 initiator 3)
     (enc (hash initiator-5 (pubk initiator-5))
       (privk certificateAuthority)) (6 2))
@@ -5175,7 +5191,9 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit (0 0)) (NonceRecv-5 (6 1)) (NonceRecv-4 (5 1))
+    (NonceRecv-3 (4 1)) (NonceRecv-2 (3 1)) (NonceRecv-1 (2 1))
+    (NonceRecv-0 (1 1))))</pre>
 
 <p id="k20">Item <a href="#t0">20</a>, Parent: <a href="#k18">18</a>.</p>
 
@@ -5429,7 +5447,8 @@
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)) ((4 3) (3 2))
     ((5 3) (4 2)) ((6 3) (5 2)) ((7 2) (6 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceRecv-4 NonceRecv-5 NonceInit-6)
   (operation encryption-test (added-strand initiator 3)
     (enc (hash initiator-5 (pubk initiator-5))
       (privk certificateAuthority)) (6 2))
@@ -5618,7 +5637,9 @@
         (NonceInit NonceInit) (IKEheader IKEheader) (SAi1 SAi1)
         (SAr1 SAr1) (SAi2 SAi2) (SAr2 SAr2) (TSi TSi) (TSr TSr)
         (NonceRecv NonceRecv))))
-  (origs (NonceInit (0 0))))</pre>
+  (origs (NonceInit-6 (7 0)) (NonceRecv-5 (6 1)) (NonceRecv-4 (5 1))
+    (NonceRecv-3 (4 1)) (NonceRecv-2 (3 1)) (NonceRecv-1 (2 1))
+    (NonceRecv-0 (1 1)) (NonceInit (0 0))))</pre>
 
 <p id="k21">Item <a href="#t0">21</a>, Parent: <a href="#k18">18</a>.</p>
 
@@ -5875,7 +5896,8 @@
   (precedes ((1 3) (0 3)) ((2 3) (1 2)) ((3 3) (2 2)) ((4 3) (3 2))
     ((5 3) (4 2)) ((6 3) (5 2)) ((7 3) (6 2)))
   (non-orig (privk certificateAuthority))
-  (uniq-orig NonceInit)
+  (uniq-orig NonceInit NonceRecv-0 NonceRecv-1 NonceRecv-2 NonceRecv-3
+    NonceRecv-4 NonceRecv-5 NonceRecv-6)
   (operation encryption-test (added-strand responder 4)
     (enc (hash initiator-5 (pubk initiator-5))
       (privk certificateAuthority)) (6 2))

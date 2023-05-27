@@ -37,7 +37,7 @@
                         SAi2 
                         TSi 
                         TSr
-                        (hash NonceInit NonceRecv (pubk responder) (pubk initiator))
+                        (hash NonceInit NonceRecv (pubk responder) (pubk initiator)) ;;SK
                     )
                 )
             );;End send
@@ -53,7 +53,7 @@
                         SAr2
                         TSi
                         TSr
-                        (hash NonceInit NonceRecv (pubk initiator) (pubk responder))
+                        (hash NonceInit NonceRecv (pubk initiator) (pubk responder)) ;;SK
                     )
                 )
             );;End recv
@@ -102,7 +102,7 @@
                         SAr2 
                         TSi 
                         TSr 
-                        (hash NonceInit NonceRecv (pubk initiator) (pubk responder))
+                        (hash NonceInit NonceRecv (pubk initiator) (pubk responder)) ;;SK
                     )
                 )
             );;End send
